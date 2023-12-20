@@ -64,6 +64,9 @@ strategy = SaveModelStrategy(
     initial_parameters=ndarrays_to_parameters(model.get_weights()),
 )
 
+#log output
+fl.common.logger.configure(identifier='flowerdemo server', filename='server.txt')
+
 # Start Flower server
 fl.server.start_server(
     server_address=server_address,

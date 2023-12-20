@@ -10,11 +10,18 @@ from tensorflow import keras
 # Hyperparameters
 server_address = '127.0.0.1:8080'
 verbose = 0
-client_nr = 0
 
+# Arguments
+parser = argparse.ArgumentParser(description='flowerdemo client skript')
+parser.add_argument('client_nr', type=int, help='Client number for partitioning train and test data', choices=(range(0,4)))
+args = parser.parse_args()
+
+# data
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 
 # partitioning data
+client_nr = args.client_nr
+print('Client nr:', client_nr)
 start_index = client_nr * 12500 
 end_index = 12500 * (client_nr + 1)
 x_train, y_train = x_train[start_index:end_index], y_train[start_index:end_index]
@@ -50,6 +57,8 @@ class Client(fl.client.NumPyClient):
         loss, accuracy = self.model.evaluate(x_test, y_test)
         return loss, len(x_test), {"accuracy": accuracy}
 
+#log output
+fl.common.logger.configure(identifier='flowerdemo client nr:'+str(client_nr), filename='client_'+str(client_nr)+'.txt')
 
 # Start Flower client
 fl.client.start_numpy_client(server_address=server_address, client=Client(None))
