@@ -28,3 +28,4 @@ virtualenv==20.14.1
 virtualenv-clone==0.5.7
 wrapt==1.11.2
 zipp==3.8.0
+tensorflow=2.11.0
