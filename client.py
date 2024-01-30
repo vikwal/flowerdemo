@@ -8,7 +8,7 @@ from tensorflow import keras
 
 
 # Hyperparameters
-server_address = '127.0.0.1:8080'
+server_address = '192.168.240.4:8080'
 verbose = 0
 
 # Arguments
