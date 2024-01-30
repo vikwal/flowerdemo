@@ -27,4 +27,4 @@ virtualenv==*
 virtualenv-clone==*
 wrapt==*
 zipp==*
-tensorflow==2.11.0
+tensorflow==2.13.0
