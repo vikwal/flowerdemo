@@ -8,7 +8,7 @@ from tensorflow import keras
 
 # Hyperparameters
 # fl-specific
-server_address = '0.0.0.0:8080'
+server_address = '192.168.240.4:8080'
 num_rounds = 3
 min_fit_clients = 2
 min_available_clients = 2
