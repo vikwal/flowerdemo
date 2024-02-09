@@ -1,6 +1,8 @@
 import argparse
 import os
 import json
+import numpy as np
+import pandas as pd
 
 import flwr as fl
 import tensorflow as tf
@@ -16,19 +18,17 @@ parser = argparse.ArgumentParser(description='flowerdemo client skript')
 parser.add_argument('client_nr', type=int, help='Client number for partitioning train and test data', choices=(range(0,4)))
 args = parser.parse_args()
 
-# data
-(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-
-# partitioning data
+# laod data
 client_nr = args.client_nr
 print('Client nr:', client_nr)
-start_index = client_nr * 12500 
-end_index = 12500 * (client_nr + 1)
-x_train, y_train = x_train[start_index:end_index], y_train[start_index:end_index]
 
-start_index = client_nr * 2500 
-end_index = 2500 * (client_nr + 1)
-x_test, y_test = x_test[start_index:end_index], y_test[start_index:end_index]
+df = pd.read_csv('mnist_for_client_'+str(client_nr)+'.csv')
+
+train_set = df[:12500]
+test_set = df[12500:]
+
+x_train, y_train = train_set.drop('y', axis=1).values.reshape(-1,28,28), train_set.y
+x_test, y_test = test_set.drop('y', axis=1).values.reshape(-1,28,28), test_set.y
 
 # Define Flower client
 class Client(fl.client.NumPyClient):
